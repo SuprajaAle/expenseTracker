@@ -1,9 +1,12 @@
 package com.example.demo.Controller;
 
 import com.example.demo.LoginService;
+import com.example.demo.dao.FoodRepo;
 import com.example.demo.dao.UserRepo;
 import com.example.demo.user.User;
 import com.example.demo.user.UserDetails;
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
@@ -18,14 +21,14 @@ import java.util.Optional;
 
 @Controller
 @CrossOrigin(origins = "*")
+@SessionAttributes("user")
 public class HomeController {
-
-
-    private User user = new User();
     @Autowired
     UserRepo repo;
     @Autowired
     UserDetails userDetails;
+    @Autowired
+    FoodRepo foodRepo;
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -35,28 +38,31 @@ public class HomeController {
 
     @GetMapping("/")
     public String login() {
-
         return "newlogin";
     }
 
-    @PostMapping("saved")
+    @PostMapping("signupPage")
     public String save(@RequestParam String email, @RequestParam String password, ModelMap model) {
         LoginService service = new LoginService();
         int userId = service.getUsers(repo.findAll(), email, password);
         if (userId == 0) {
             model.put("error", "Email id and password doesn't Match");
-            return "newlogin";
+            return "redirect:/";
         }
-        User user = repo.findById(userId).orElse(new User());
+        User user = repo.findById(userId).orElse(null);
         model.put("user", user);
-
-        System.out.println("user = " + user);
+        model.put("foodlist",foodRepo.findByUserid(user.getId()) );
         return "welcome";
     }
-
-    @GetMapping("/signup")
+@GetMapping("/welcomePage")
+public String welcomePage(ModelMap map) {
+	User user = (User) map.getAttribute("user");
+	  map.put("foodlist",foodRepo.findByUserid(user.getId()) );
+	return "welcome";
+}
+    @GetMapping("/signupPage")
     public String sign(ModelMap model) {
-        model.put("user", user);
+    	model.put("user",new User());
         return "signup";
     }
 

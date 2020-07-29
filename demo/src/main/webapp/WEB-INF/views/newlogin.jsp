@@ -24,7 +24,7 @@
 
 <div class="container mt-5">
 
-        <form action="/saved" method="post">
+        <form action="/signupPage" method="post">
             <div class="form-group">
                 <label for="exampleInputEmail1">Email address</label>
                 <input type="email" class="form-control" id="exampleInputEmail1" name="email" aria-describedby="emailHelp" required>
@@ -35,7 +35,7 @@
                 <input type="password" name="password" class="form-control" id="exampleInputPassword1" required>
             </div>
             <button type="submit" class="btn btn-primary w-25" aria-describedby="new" >LogIn</button> ${error}
-            <small id="new" class="form-text text-muted" >Don't have an account <a href="/signup">Sign up</a>.</small>
+            <small id="new" class="form-text text-muted" >Don't have an account <a href="/signupPage">Sign up</a>.</small>
 
         </form>
 </div>
